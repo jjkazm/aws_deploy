@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  web:
+    environment:
+      RAILS_MASTER_KEY: "$RAILS_MASTER_KEY"
+    build:
+      context: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rake assets:precompile RAILS_ENV=production && bundle exec rake db:migrate && dumb-init bundle exec puma -C config/puma.rb"
+    volumes:
+      - .:/aws_deploy
+    ports:
+      - "80:3000"
